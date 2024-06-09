@@ -37,7 +37,8 @@ class RouteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val route = viewModel.currentRoute
+        val route = viewModel.routeForDriver.value
+        viewModel.routeForDriver.postValue(null)
         binding.routeName.text = "Name: ${route?.name}"
         binding.routeType.text = "Type: ${route?.type}"
         binding.routeId.text = "ID: ${route?.id}"

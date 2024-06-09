@@ -17,19 +17,18 @@ class MainViewModel @Inject constructor(private val repository: WastePickupRepos
     ViewModel() {
 
     val driver = MutableLiveData<Driver>()
-    val routeForDriver = MutableLiveData<Route>()
-    var currentDriverList: MutableList<Driver> = mutableListOf()
-    var currentRoute: Route? = null
+    val routeForDriver = MutableLiveData<Route?>()
+    private var driverCache: MutableList<Driver> = mutableListOf()
 
     fun loadDrivers() {
-        if(currentDriverList.isNotEmpty()){
+        if(driverCache.isNotEmpty()){
             emitCachedDrivers()
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 repository.getDrivers().collect {
                     launch(Dispatchers.Main) {
                         driver.value = it
-                        currentDriverList.add(it)
+                        driverCache.add(it)
                         Log.d("MainViewModel", "driver emitted: ${it.name}")
                     }
                 }
@@ -38,7 +37,7 @@ class MainViewModel @Inject constructor(private val repository: WastePickupRepos
     }
 
     private fun emitCachedDrivers(){
-        currentDriverList.forEach {
+        driverCache.forEach {
             driver.value = it
             Log.d("MainViewModel", "cached driver emitted: ${it.name}")
         }
@@ -48,7 +47,6 @@ class MainViewModel @Inject constructor(private val repository: WastePickupRepos
         viewModelScope.launch(Dispatchers.IO) {
             repository.getRoutesForDriver(driver.id).collect{route ->
                 launch(Dispatchers.Main) {
-                    currentRoute = route
                     routeForDriver.value = route
                 }
             }
@@ -56,7 +54,7 @@ class MainViewModel @Inject constructor(private val repository: WastePickupRepos
     }
 
     fun onSortByLastName() {
-        currentDriverList.sortBy {
+        driverCache.sortBy {
             it.name.split(" ").last()
         }
         emitCachedDrivers()
