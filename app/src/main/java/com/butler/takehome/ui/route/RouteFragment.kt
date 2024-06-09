@@ -1,18 +1,28 @@
 package com.butler.takehome.ui.route
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.butler.takehome.data.model.Route
+import androidx.lifecycle.ViewModelProvider
 import com.butler.takehome.databinding.FragmentRouteBinding
+import com.butler.takehome.ui.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class RouteFragment(private val route: Route): Fragment() {
+@AndroidEntryPoint
+class RouteFragment : Fragment() {
 
     private var _binding: FragmentRouteBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: MainViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,9 +37,10 @@ class RouteFragment(private val route: Route): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.routeName.text = "Name: ${route.name}"
-        binding.routeType.text = "Type: ${route.type}"
-        binding.routeId.text = "ID: ${route.id}"
+        val route = viewModel.currentRoute
+        binding.routeName.text = "Name: ${route?.name}"
+        binding.routeType.text = "Type: ${route?.type}"
+        binding.routeId.text = "ID: ${route?.id}"
     }
 
     override fun onDestroyView() {

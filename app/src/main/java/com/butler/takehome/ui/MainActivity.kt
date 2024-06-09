@@ -27,9 +27,9 @@ class MainActivity : AppCompatActivity() {
         ft.addToBackStack(null)
         ft.commit()
 
-        viewModel.routeForDriver.observe(this){
+        viewModel.routeForDriver.observe(this) {
             val ftRoute = supportFragmentManager.beginTransaction()
-            ftRoute.replace(R.id.fragment_container, RouteFragment(it))
+            ftRoute.replace(R.id.fragment_container, RouteFragment())
             ftRoute.addToBackStack("RouteScreen")
             ftRoute.commit()
         }

@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.butler.takehome.data.model.Driver
 import com.butler.takehome.databinding.ItemDriverBinding
 
-class DriverAdapter(private val onClick: (Driver) -> Unit): RecyclerView.Adapter<DriverAdapter.DriverViewHolder>() {
+class DriverAdapter(private val onClick: (Driver) -> Unit) :
+    RecyclerView.Adapter<DriverAdapter.DriverViewHolder>() {
 
     private val driverList = mutableListOf<Driver>()
 
@@ -16,11 +17,9 @@ class DriverAdapter(private val onClick: (Driver) -> Unit): RecyclerView.Adapter
         notifyItemRangeChanged(oldPosition, driverList.size)
     }
 
-    fun sortByLastName(){
-        driverList.sortBy {
-            it.name.split(" ").last()
-        }
-        notifyItemRangeChanged(0, driverList.size)
+    fun clearList() {
+        driverList.clear()
+        notifyItemRangeRemoved(0, 0)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DriverViewHolder {
@@ -29,8 +28,8 @@ class DriverAdapter(private val onClick: (Driver) -> Unit): RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: DriverViewHolder, position: Int) {
-        with(holder){
-            with(driverList[position]){
+        with(holder) {
+            with(driverList[position]) {
                 binding.driverName.text = name
                 binding.driverId.text = "ID: $id"
                 itemView.setOnClickListener {
@@ -49,5 +48,6 @@ class DriverAdapter(private val onClick: (Driver) -> Unit): RecyclerView.Adapter
         return driverList
     }
 
-    inner class DriverViewHolder(val binding: ItemDriverBinding): RecyclerView.ViewHolder(binding.root)
+    inner class DriverViewHolder(val binding: ItemDriverBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

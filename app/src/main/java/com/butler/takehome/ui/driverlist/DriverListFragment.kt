@@ -20,7 +20,7 @@ import com.butler.takehome.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DriverListFragment: Fragment() {
+class DriverListFragment : Fragment() {
 
     private lateinit var driverAdapter: DriverAdapter
     private var _binding: FragmentDriverListBinding? = null
@@ -40,7 +40,7 @@ class DriverListFragment: Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        driverAdapter = DriverAdapter{ driver -> adapterOnClick(driver) }
+        driverAdapter = DriverAdapter { driver -> adapterOnClick(driver) }
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
@@ -54,22 +54,29 @@ class DriverListFragment: Fragment() {
         viewModel.driver.observe(viewLifecycleOwner) {
             driverAdapter.addDriver(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        driverAdapter.clearList()
         viewModel.loadDrivers()
     }
 
-    private fun setupToolbarMenu(){
+    private fun setupToolbarMenu() {
         val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider{
+        menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.driver_list, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when(menuItem.itemId){
+                return when (menuItem.itemId) {
                     R.id.sortByName -> {
-                        driverAdapter.sortByLastName()
+                        driverAdapter.clearList()
+                        viewModel.onSortByLastName()
                         true
                     }
+
                     else -> {
                         false
                     }
@@ -78,8 +85,7 @@ class DriverListFragment: Fragment() {
         }, viewLifecycleOwner)
     }
 
-    private fun adapterOnClick(driver: Driver){
-        viewModel.currentDriverList = driverAdapter.getList()
+    private fun adapterOnClick(driver: Driver) {
         viewModel.onDriverSelected(driver)
     }
 

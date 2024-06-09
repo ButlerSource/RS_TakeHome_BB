@@ -11,10 +11,9 @@ import com.butler.takehome.data.remote.network.WastePickupAPI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
-import java.util.UUID
 
 class WastePickupRepositoryImpl(val context: Context) : WastePickupRepository {
-    //TODO: Handle Network/Database Errors
+    //TODO: Handle Network/Database Errors. Listen for network with ConnectivityManager
     override suspend fun getDrivers(): Flow<Driver> {
         val driverDao = WastePickupDatabase.getDatabase(context).driverDao()
 
@@ -53,7 +52,7 @@ class WastePickupRepositoryImpl(val context: Context) : WastePickupRepository {
         //2: return a backup route
         val routes = routeDao.getAll()
         routes.forEach {
-            Log.d("Repository", "Route: ${it.routeName} , ${it.routeType}")
+            Log.d("Repository", "Backup Route: ${it.routeName} , ${it.routeType}, ${it.routeId}")
         }
         var routeBackup = if (driverIdInt % 2 == 0) {
             routes.first { it.routeType == "R" }
