@@ -1,4 +1,4 @@
-package com.butler.takehome.data.model
+package com.butler.takehome.domain.model
 
 import com.butler.takehome.data.local.entity.Driver
 import kotlinx.serialization.SerialName

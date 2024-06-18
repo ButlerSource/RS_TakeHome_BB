@@ -3,22 +3,22 @@ package com.butler.takehome.ui.driverlist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.butler.takehome.data.model.Driver
+import com.butler.takehome.domain.model.Driver
 import com.butler.takehome.databinding.ItemDriverBinding
 
 class DriverAdapter(private val onClick: (Driver) -> Unit) :
     RecyclerView.Adapter<DriverAdapter.DriverViewHolder>() {
 
-    private val driverList = mutableListOf<Driver>()
+    private var driverList = listOf<Driver>()
 
-    fun addDriver(driver: Driver) {
+    fun addDrivers(drivers: List<Driver>) {
         val oldPosition = driverList.size
-        driverList.add(driver)
+        driverList = drivers
         notifyItemRangeChanged(oldPosition, driverList.size)
     }
 
     fun clearList() {
-        driverList.clear()
+        driverList = listOf<Driver>()
         notifyItemRangeRemoved(0, 0)
     }
 

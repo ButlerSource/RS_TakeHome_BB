@@ -1,9 +1,11 @@
 package com.butler.takehome.di
 
 import android.content.Context
+import androidx.room.Room
 import com.butler.takehome.data.WastePickupRepository
 import com.butler.takehome.data.WastePickupRepositoryImpl
 import com.butler.takehome.data.local.WastePickupDatabase
+import com.butler.takehome.data.remote.network.WastePickupAPI
 import com.butler.takehome.data.remote.network.WastePickupService
 import dagger.Module
 import dagger.Provides
@@ -14,10 +16,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RepositoryModule {
+class NetworkModule {
     @Singleton
     @Provides
-    fun provideWastePickupRepository(db: WastePickupDatabase,service: WastePickupService, @ApplicationContext context: Context): WastePickupRepository {
-        return WastePickupRepositoryImpl(db, service, context)
+    fun provideWastePickupService(): WastePickupService {
+        return WastePickupAPI.create()
     }
 }

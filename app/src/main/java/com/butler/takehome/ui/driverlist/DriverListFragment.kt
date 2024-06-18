@@ -14,7 +14,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.butler.takehome.R
-import com.butler.takehome.data.model.Driver
+import com.butler.takehome.domain.model.Driver
 import com.butler.takehome.databinding.FragmentDriverListBinding
 import com.butler.takehome.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +52,7 @@ class DriverListFragment : Fragment() {
         binding.driverList.adapter = driverAdapter
 
         viewModel.driver.observe(viewLifecycleOwner) {
-            driverAdapter.addDriver(it)
+            driverAdapter.addDrivers(it)
         }
     }
 

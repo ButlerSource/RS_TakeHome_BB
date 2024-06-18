@@ -1,11 +1,11 @@
 package com.butler.takehome.data
 
-import com.butler.takehome.data.model.Driver
-import com.butler.takehome.data.model.Route
+import com.butler.takehome.domain.model.Driver
+import com.butler.takehome.domain.model.Route
 import kotlinx.coroutines.flow.Flow
 
 interface WastePickupRepository {
-    suspend fun getDrivers(): Flow<Driver>
+    fun getDrivers(): Flow<List<Driver>>
 
-    suspend fun getRoutesForDriver(driverId: String): Flow<Route>
+    fun getRoutesForDriver(driverId: String): Flow<Route>
 }

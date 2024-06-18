@@ -6,11 +6,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.butler.takehome.data.local.entity.Driver
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DriverDao {
     @Query("SELECT * FROM Driver")
-    fun getAll(): List<Driver>
+    fun getAll(): Flow<List<Driver>>
 
     @Query("SELECT * FROM Driver WHERE driver_id = :driverId LIMIT 1")
     fun getById(driverId: String): Driver
